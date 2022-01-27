@@ -1,0 +1,359 @@
+
+Ques 231=
+By Brute force
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+         if (n == 0) 
+            return false;
+        while (n%2 == 0)
+            n /= 2;
+       return n==1;
+    }
+}
+
+By bitwise method
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+         if (n == 0) 
+            return false;
+        long x = (long) n;
+        
+       return (x & (-x)) == x;
+    }
+}
+
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+         if (n == 0) 
+            return false;
+        long x = (long) n;
+        
+       return (x & (x-1)) == 0;
+    }
+}
+
+Ques 392
+2 pointer approach
+
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        if(s==null || s.isEmpty()) 
+            return true;
+        int index=-1;
+        for(char  c:s.toCharArray())
+        {
+            index=t.indexOf(c,index+1);
+            if(index==-1){
+                return false;
+            }
+        }
+        return true;   
+    }
+}
+
+
+Ques = 322
+class Solution {
+    public int change(int amount, int[] coins) {
+        int max = amount + 1;
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp,max);
+        dp[0] = 0;
+        for(int i =1; i<= amount;i++){
+            for(int j = 0; j< coins.length; j++){
+                if(coins[j] <= i){
+                    dp[i] = Math.min(dp[i], dp[i-coins[j]]+1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+        
+    }
+}
+
+
+Ques = 518
+
+class Solution {
+    public int change(int amount, int[] coins) {
+      int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for(int c : coins){
+            for(int j=c; j<= amount; ++j)
+                dp[j] += dp[j-c];
+        }
+        return dp[amount]; 
+        
+    }
+}
+
+Ques = 344
+
+class Solution {
+    public void reverseString(char[] s) {
+        int left = 0, right = s.length-1;
+        while(left < right){
+            char temp=s[right];
+            s[right--] = s[left];
+            s[left++] = temp;
+        }
+        
+    }
+}
+
+
+Ques = 441
+
+class Solution {
+    public int arrangeCoins(int n) {
+        
+        
+        //   int lo = 1, hi = n, mid;
+        // while (lo <= hi) {
+        //     mid = lo + (hi - lo) / 2;
+        //     if (mid * (mid + 1L) <= n * 2L) lo = mid + 1;
+        //     else hi = mid - 1;
+        // }
+        // return hi;
+        
+        // return (int) (Math.sqrt(n * 8L + 1) - 1 ) / 2;
+        
+        //return (int) (Math.sqrt(2*(long)n) +0.25 )-0.5;
+        
+        // int level = 0, coin = 1;
+        // while (n >= coin) {
+        //     n -= coin;
+        //     coin++;
+        //     level++;
+        // }
+        // return level;
+        
+        long left = 0, right = n;
+         while (left <= right) {
+        long mid = left+(right - left)/2;
+        long k = mid*(mid + 1) / 2;
+        if(k == n) {
+
+        return (int)mid;
+
+        }   
+
+        else if (k>n) { 
+            right = mid - 1;
+
+
+        }
+        else{
+
+            left = mid + 1;
+
+}
+
+}
+
+        return (int)right;
+        }
+      
+    }
+
+
+Ques = 279
+
+class Solution {
+    public int numSquares(int n) {
+          int[] dp = new int[n + 1];
+        Arrays.fill(dp,n);
+        dp[0] = 0;
+        dp[1] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j * j <= i; j++) {
+                if(i-j*j>=0)
+                dp[i] = Math.min(dp[i - j * j] + 1,dp[i]);
+            }
+        }
+        return dp[n];
+    }
+}
+
+Another Solution
+
+class Solution {
+    public int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            dp[i] = i;
+            for (int j = 1; j * j <= i; j++) {
+                dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+            }
+        }
+        return dp[n];
+    }
+}
+
+Ques = 62
+
+class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] ar=new int[m][n];
+        for(int i =0; i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0||j==0){
+                    ar[i][j]=1;
+                }
+                else{
+                    ar[i][j]=ar[i-1][j]+ar[i][j-1];
+                }
+            }
+        }
+         return ar[m-1][n-1];
+    }
+}
+
+Ques = 63
+
+class Solution {
+    public int uniquePathsWithObstacles(int[][] grid) {
+        int m = grid.length, n= grid[0].length;
+        if(grid[0][0]==1) return 0;
+        for(int i=0; i<m; i++){
+            for(int j=0;j<n;j++){
+                //first row && first column
+                if(i==0 || j==0){
+                    if(grid[i][j] == 1 || (i!=0 && grid[i-1][0]==0) || (j!=0 && grid[i][j-1]==0)){
+                        grid[i][j]=0;
+                    }
+                    else{
+                         grid[i][j]=1;
+                    }
+                }
+                else{
+                    if(grid[i][j]==1){
+                        grid[i][j] = 0;
+                    }
+                    else{
+                        grid[i][j] = grid[i-1][j] + grid[i][j-1];
+                    }
+                }
+                
+            }
+        }
+          
+        return grid[m-1][n-1];
+        
+        
+        
+    }
+}
+
+Ques = 64
+
+class Solution {
+    public int minPathSum(int[][] grid) {
+        if(grid== null || grid.length==0 || grid[0].length==0){
+            return 0;
+        }
+        int rows = grid.length,columns = grid[0].length;
+        int[][] dp=new int[rows][columns];
+        dp[0][0] = grid[0][0];
+        for (int i=1;i<rows;i++){
+            dp[i][0] = dp[i-1][0] +grid[i][0];
+        }
+        for(int j=1;j<columns;j++){
+            dp[0][j]= dp[0][j-1]+ grid[0][j];
+        }
+        for(int i = 1; i<rows; i++){
+            for(int j=1;j<columns;j++){
+                dp[i][j]= Math.min(dp[i-1][j], dp[i][j-1])+grid[i][j];
+            }
+        }
+        return dp[rows -1][columns -1];
+    }
+}
+
+Ques = 46
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums.length < 1) return res;
+        helper(res, new ArrayList<>(), nums, new boolean[nums.length]);
+        return res;
+    }
+    private void helper(List<List<Integer>> res,List<Integer> cur, int[] nums, boolean[] visited){
+        if(cur.size() == nums.length){
+            res.add(new ArrayList(cur));
+
+            return; 
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+
+            if (visited[i]) continue;
+
+                cur.add (nums [i]); 
+                 visited[i] = true;
+
+                helper (res, cur, nums, visited);
+                     cur.remove(cur.size()-1);
+         visited[i] = false;
+        }
+    }
+}
+
+
+Ques =3 
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+       Map<Character, Integer> map=new HashMap<>(); 
+        int maxLength=0;
+        int start=0;
+        for (int end=0; end<s.length(); end++) 
+        {
+            char rightChar=s.charAt(end);
+            if (map.containsKey (rightChar)) 
+            {
+                start=Math.max (start, map.get (rightChar)+1);
+            }
+            map.put(rightChar, end); 
+            maxLength=Math.max(maxLength,end-start+1);
+        }
+        return maxLength;
+        
+    }
+}
+
+
+Ques  = 55
+
+class Solution {
+    public boolean canJump(int[] nums) {
+        //  int max = 0;
+        // for (int i = 0; i < nums.length; i ++) {
+        //     if (i > max) {
+        //         return false;
+        //     }
+        //     max = Math.max(max, i + nums[i]);
+        // }
+        // return true;
+        
+        // Another Solution
+        
+        int n = nums.length;
+        if(n==1) return true;
+        int max= 0;
+        for(int index = 0; index<n-1 && max>=index ; index++){
+            if(max<index+nums[index]){
+                max = index + nums[index];
+           }
+        if(max>=n-1){
+            return true;
+             }
+        }
+        return false;
+        
+    }
+}
